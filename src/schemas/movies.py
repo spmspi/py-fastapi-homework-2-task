@@ -1,10 +1,10 @@
 from datetime import date, timedelta
 from typing import Annotated, Literal, List, Optional
 from pydantic import BaseModel, ConfigDict, Field, field_validator, ValidationError
-from annotated_types import Gt, Lt
+from annotated_types import Lt, Ge
 
 
-class MovieShema(BaseModel):
+class MovieListItemSchema(BaseModel):
     id: int
     name: str = Field(max_length=255)
     date: date
@@ -13,7 +13,7 @@ class MovieShema(BaseModel):
 
 
 class MovieListResponseSchema(BaseModel):
-    movies: list[MovieShema]
+    movies: list[MovieListItemSchema]
     prev_page: str | None
     next_page: str | None
     total_pages: int
@@ -60,13 +60,13 @@ class Languages(LanguagesBase):
     model_config = ConfigDict(from_attributes=True)
 
 
-class MovieDetailSchema(MovieShema):
+class MovieDetailSchema(MovieListItemSchema):
     date: Annotated[date, Lt(date.today() + timedelta(days=365))]
-    score: Annotated[float, Gt(0), Lt(100)]
+    score: Annotated[float, Ge(0), Lt(100)]
     overview: str
     status: Literal["Released", "Post Production", "In Production"]
-    budget: Annotated[float, Gt(0)]
-    revenue: Annotated[float, Gt(0)]
+    budget: Annotated[float, Ge(0)]
+    revenue: Annotated[float, Ge(0)]
     country: Country
     genres: List[Genres]
     actors: List[Actor]
@@ -75,18 +75,14 @@ class MovieDetailSchema(MovieShema):
     model_config = ConfigDict(from_attributes=True)
 
 
-class MovieListItemSchema(BaseModel):
-    pass
-
-
 class MovieCreateSchema(BaseModel):
     name: str = Field(max_length=255)
     date: date
-    score: Annotated[float, Gt(0), Lt(100)]
+    score: Annotated[float, Ge(0), Lt(100)]
     overview: str
     status: Literal["Released", "Post Production", "In Production"]
-    budget: Annotated[float, Gt(0)]
-    revenue: Annotated[float, Gt(0)]
+    budget: Annotated[float, Ge(0)]
+    revenue: Annotated[float, Ge(0)]
     country: str
     genres: List[str]
     actors: List[str]
@@ -102,10 +98,10 @@ class MovieUpdateSchema(BaseModel):
     name: str | None = Field(default=None, max_length=255)
     overview: str | None = None
     date: Optional[date] = None
-    score: Annotated[float, Gt(0), Lt(100)] | None = None
+    score: Annotated[float, Ge(0), Lt(100)] | None = None
     status: Literal["Released", "Post Production", "In Production"] | None = None
-    budget: Annotated[float, Gt(0)] | None = None
-    revenue: Annotated[float, Gt(0)] | None = None
+    budget: Annotated[float, Ge(0)] | None = None
+    revenue: Annotated[float, Ge(0)] | None = None
     country: str | None = None
     genres: List[str] | None = None
     actors: List[str] | None = None

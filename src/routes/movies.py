@@ -195,7 +195,7 @@ async def create_movie(
     return db_movie
 
 
-@router.patch("/movies/{movie_id}/", response_model=MovieUpdateResponseSchema)
+@router.patch("/movies/{movie_id}/")
 async def update_movie(
     data: MovieUpdateSchema,
     request: Request,
@@ -216,24 +216,24 @@ async def update_movie(
     if not movie:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Movie with the given ID was not found.",
+            detail="Movie with the given ID was not found.",
         )
-    if data.name != None:
+    if data.name is not None:
         movie.name = data.name
-    if data.overview != None:
+    if data.overview is not None:
         movie.overview = data.overview
-    if data.score != None:
+    if data.score is not None:
         movie.score = data.score
-    if data.budget != None:
+    if data.budget is not None:
         movie.budget = data.budget
-    if data.revenue != None:
+    if data.revenue is not None:
         movie.revenue = data.revenue
-    if data.date != None:
+    if data.date is not None:
         movie.date = data.date
-    if data.country != None:
+    if data.country is not None:
         movie.country.code = data.country
 
-    if data.genres != None:
+    if data.genres is not None:
         genres_list = []
         for genre in data.genres:
             stmt = select(GenreModel).where(GenreModel.name == genre)
@@ -244,7 +244,7 @@ async def update_movie(
             genres_list.append(genre_db)
         movie.genres = genres_list
 
-    if data.actors != None:
+    if data.actors is not None:
         actors_list = []
         for actor in data.actors:
             stmt = select(ActorModel).where(ActorModel.name == actor)
@@ -256,7 +256,7 @@ async def update_movie(
             actors_list.append(actor_db)
         movie.actors = actors_list
 
-    if data.languages != None:
+    if data.languages is not None:
         languages_list = []
         for language in data.languages:
             stmt = select(LanguageModel).where(LanguageModel.name == language)
