@@ -1,12 +1,11 @@
-from typing import List, Annotated
+from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Body
-from flake8.formatting import default
+from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi import Request
 from sqlalchemy import select, func, desc
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload, session, selectinload
+from sqlalchemy.orm import session, selectinload
 from starlette import status
 from starlette.responses import JSONResponse
 

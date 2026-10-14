@@ -8,7 +8,7 @@ class MovieListItemSchema(BaseModel):
     id: int
     name: str = Field(max_length=255)
     date: date
-    score: int
+    score: float
     overview: str
 
 
@@ -115,5 +115,5 @@ class MovieUpdateSchema(BaseModel):
                 raise ValidationError(f"{v} is not valid")
 
 
-class MovieUpdateResponseSchema(MovieDetailSchema):
+class MovieUpdateResponseSchema(BaseModel):
     detail: str
